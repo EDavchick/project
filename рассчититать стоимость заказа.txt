@@ -1,0 +1,337 @@
+рассчититать стоимость заказа
+
+/**
+
+ * Класс, объекты которого описывают параметры гамбургера.
+
+ *
+
+ * @constructor
+
+ * @param size Размер
+
+ * @param stuffing Начинка
+
+ * @throws {HamburgerException} При неправильном использовании
+
+ */
+//var orderHamburger = {
+    //SIZE_SMALL: "SIZE_SMALL",
+    //SIZE_LARGE: "SIZE_LARGE",
+    //STUFFING_CHEESE: "STUFFING_CHEESE",
+    //STUFFING_SALAD: "STUFFING_SALAD",
+    //STUFFING_POTATO: "STUFFING_POTATO",
+    //TOPPING_ONION: "TOPPING_ONION",
+    //TOPPING_SPICE: "TOPPING_SPICE"
+//};
+var orderHamburger = {
+        SIZE_SMALL: {param: "SIZE_SMALL", price: 50, calorie: 20},
+        SIZE_LARGE: {param: "SIZE_LARGE", price: 100, calorie: 40},
+        STUFFING_CHEESE: {param: "STUFFING_CHEESE", price: 10, calorie: 20},
+        STUFFING_SALAD: {param: "STUFFING_SALAD", price: 20, calorie: 5},
+        STUFFING_POTATO: {param: "STUFFING_POTATO", price: 15, calorie: 5},
+        TOPPING_ONION: {param: "TOPPING_ONION", price: 20, calorie: 5},
+        TOPPING_SPICE: {param: "TOPPING_SPICE", price: 15, calorie: 0}
+    };
+
+function Hamburger(size, stuffing) {
+    if (!!size.param && !!stuffing.param) {
+        this.init(size, stuffing);
+    } else {
+        console.log("Ошибка инициализации");
+    }
+}
+
+Hamburger.prototype.init = function (size, stuffing) {
+    this.params = {
+        size: size,
+        stuffing: stuffing,
+        topping: []
+    };
+};
+
+/* Размеры, виды начинок и добавок */
+/**
+
+ * Добавить добавку к гамбургеру. Можно добавить несколько
+
+ * добавок, при условии, что они разные.
+
+ *
+
+ * @param topping Тип добавки
+
+ * @throws {HamburgerException} При неправильном использовании
+
+ */
+// Добавить добавку
+Hamburger.prototype.addTopping = function (topping) {
+    var thisTopping = this.params.topping;
+    var isPresent = 0;
+    for (var i = 0; i < thisTopping.length; i++) {
+        if (thisTopping[i].param === topping.param) {
+            isPresent++;
+        }
+    }
+    if (!isPresent) {
+        thisTopping.push(topping);
+    } else {
+        console.log("Такая добавка уже есть")
+    }
+};
+
+/**
+
+ * Убрать добавку, при условии, что она ранее была
+
+ * добавлена.
+
+ *
+
+ * @param topping Тип добавки
+
+ * @throws {HamburgerException} При неправильном использовании
+
+ */
+// Убрать добавку
+Hamburger.prototype.removeTopping = function (topping) {
+    var thisTopping = this.params.topping;
+
+    for (var i = 0; i < thisTopping.length; i++) {
+        if (thisTopping[i].param === topping.param) {
+            delete thisTopping[i];
+        }
+    }
+};
+/**
+
+ * Получить список добавок.
+
+ *
+
+ * @return {Array} Массив добавленных добавок, содержит константы
+
+ * Hamburger.TOPPING_*
+
+ */
+// Получить список добавок
+Hamburger.prototype.getToppings = function () {
+    return this.params.topping;
+};
+
+/**
+
+ * Узнать размер гамбургера
+
+ */
+// Узнать размер
+Hamburger.prototype.getSize = function () {
+    return this.params.size.param;
+};
+/**
+
+ * Узнать начинку гамбургера
+
+ */
+// Узнать начинку
+Hamburger.prototype.getStuffing = function () {
+    return this.params.stuffing.param;
+};
+
+/**
+
+ * Узнать цену гамбургера
+
+ * @return {Number} Цена в тугриках
+
+ */
+// Узнать цену гамбургера
+Hamburger.prototype.calculatePrice = function () {
+    var thisParams = this.params;
+    var totalPrice;
+    var mainPrice = thisParams.size.price;
+    var stuffPrice = thisParams.stuffing.price;
+    var toppingPrice = 0;
+    for (var i = 0; i < thisParams.topping.length; i++) {
+        toppingPrice += thisParams.topping[i].price;
+    }
+    totalPrice = mainPrice + stuffPrice + toppingPrice;
+
+    return totalPrice
+};
+/**
+
+ * Узнать калорийность
+
+ * @return {Number} Калорийность в калориях
+
+ */
+Hamburger.prototype.calculateCalories = function () {
+    var thisParams = this.params;
+    var totalCalories;
+    var mainPrice = thisParams.size.calorie;
+    var stuffPrice = thisParams.stuffing.calorie;
+    var toppingPrice = 0;
+    for (var i = 0; i < thisParams.topping.length; i++) {
+        toppingPrice += thisParams.topping[i].calorie;
+    }
+    totalCalories = mainPrice + stuffPrice + toppingPrice;
+
+    return totalCalories
+};
+
+var hamburger1 = new Hamburger ();
+
+// result
+console.log("----- Задача 12 ----- \n\n");
+console.log("Размер", hamburger1.getSize());
+console.log("Начинка", hamburger1.getStuffing());
+console.log("calculatePrice", hamburger1.calculatePrice());
+console.log("calculateCalories", hamburger1.calculateCalories());
+
+console.log(hamburger1.getToppings());
+hamburger1.addTopping(orderHamburger.TOPPING_ONION);
+console.log(hamburger1.getToppings());
+hamburger1.addTopping(orderHamburger.TOPPING_SPICE);
+console.log("getToppings", hamburger1.getToppings());
+console.log("removeTopping", hamburger1.removeTopping(orderHamburger.TOPPING_ONION));
+console.log("getToppings", hamburger1.getToppings());
+console.log("\n");
+
+function OrderHamburger() {
+
+    if (document.getElementById('bigSize').checked == true) {
+        Hamburger(orderHamburger.SIZE_LARGE);
+    } else {
+    }
+    if (document.getElementById('smallSize').checked == true) {
+        Hamburger(orderHamburger.SIZE_SMALL);
+    } else {
+    }
+    var insertionQuantity = document.getElementById('nachinka').getElementsByTagName('input');
+    for (i = 0; i < insertionQuantity.length; i++){
+        if (insertionQuantity[i].checked === true){
+            Hamburger.price = Hamburger.price + additionalPrice[i];
+            Hamburger.energy = Hamburger.energy + additionalEnergy[i];
+        }
+    }
+
+    Hamburger.price = Hamburger.price + additionalPrice[i];
+    Hamburger.energy = Hamburger.energy + additionalEnergy[i];
+
+    document.getElementById('burgerPrice').innerHTML = Hamburger.price;
+    document.getElementById('burgerEnergy').innerHTML = Hamburger.energy;
+}
+* {
+    margin: 0;
+    padding: 0
+}
+
+#form {
+    display: block;
+    width: 350px;
+    margin: 15px auto 0;
+}
+
+p {
+    margin-bottom: 8px;
+}
+
+legend {
+    font-size: 17px;
+    display: block;
+    padding: 0 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.radio-variant {
+    display: inline-block;
+    width: 47%;
+}
+
+.row {
+    border-bottom: 1px solid gray;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+input[type=submit] {
+    padding: 4px 15px 6px;
+}
+
+#message {
+    height: 28px
+}
+
+label {
+    cursor: pointer;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="ST.css">
+</head>
+<body>
+<form id="form">
+    <div class="row">
+        <fieldset>
+            <legend>Create Hamburger</legend>
+            <div id="burgerSize" class="checkbox-variant">Выберите размер бургера:<br>
+                <input type="radio" name="size" id="smallSize">маленький (50 тугриков, 20 ккал)<br>
+                <input type="radio" name="size" id="bigSize">большой (100 тугриков, 40 ккал)<br>
+            </div>
+            <div id="nachinka" class="checkbox-variant">
+                Выберите начинку:<br>
+                <input type="checkbox" id="CHEESE">сыр (+ 10 тугриков, + 20 ккал)<br>
+                <input type="checkbox" id="SALAD">салат (+ 20 тугриков, + 5 ккал)<br>
+                <input type="checkbox" id="POTATO">ветчина (+ 10 тугриков, + 50 ккал)<br>
+                Дополнительно:<br>
+                <input type="checkbox" id="ONION">лук (+ 20 тугриков, 5 ккал)<br>
+                <input type="checkbox" id="SPICE">специи (+ 15 тугриков, + 0 ккал)<br>
+                <br>
+            </div>
+        </fieldset>
+
+        <button id="burgerValue" onclick="OrderHamburger()">Конечная стоимость и калорийность</button>
+        <span id="burgerPrice"></span><span>грн</span><span id="burgerEnergy"></span><span> ккал</span>
+    </div>
+</form>
+
+
+<script src="task.js"></script>
+</body>
+</html>
+Вернуться к сообщению
+
+
+    document.querySelector('body').addEventListener('change', (event) => {
+        
+        // пройти по всем элементам и подсчитать суммарные значения
+        let checks_elements = document.querySelectorAll('.checks');
+        
+        let price_total = 0;
+        let weight_total = 0;
+        
+        for (let element of checks_elements) {
+            if (element.checked == true) {
+                const price = parseInt(element.getAttribute('attr-price'));
+                price_total += price;
+                
+                const weight = parseInt(element.getAttribute('attr-weight'));
+                weight_total += weight;
+            }           
+        }
+        
+        // вывести результат
+        document.querySelector('.result').value = "цена: " + price_total.toString() + ", " + "вес: " + weight_total.toString();
+    })
+<input type = 'checkbox' class = 'checks' attr-price="50" attr-weight="10">+50 цены, +10 веса
+<br>
+<input type = 'checkbox' class = 'checks' attr-price="20" attr-weight="-5">+20 цены, -5 веса
+<br>
+<input type = 'text' class = 'result' value = '0'>
+  
+Вернуться к сообщению
